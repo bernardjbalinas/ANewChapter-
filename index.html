@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#08111f" />
+  <title>A Little Something — For Aubrey</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap');
+
+    :root {
+      --night: #050b14;
+      --night2: #0b1727;
+      --blue: #9fc9e8;
+      --soft-blue: #c8e2f3;
+      --white: #f4f7fa;
+      --muted: #91a2b5;
+      --line: rgba(159, 201, 232, 0.22);
+      --glow: rgba(111, 183, 235, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--night);
+      color: var(--white);
+      font-family: "Inter", sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ---------- BACKGROUND ---------- */
+
+    #stars {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      background:
+        radial-gradient(circle at 50% 20%, #132945 0%, transparent 42%),
+        linear-gradient(180deg, #050b14 0%, #07111e 55%, #03070d 100%);
+    }
+
+    .star {
+      position: fixed;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.35;
+      animation: twinkle 3s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.15; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.5); }
+    }
+
+    .glow {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: var(--glow);
+      filter: blur(100px);
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: -2;
+      transition: transform 1.5s ease;
+    }
+
+    /* ---------- MUSIC ---------- */
+
+    .music-player {
+      position: fixed;
+      right: 22px;
+      top: 22px;
+      z-index: 100;
+    }
+
+    .music-button {
+      border: 1px solid rgba(200, 226, 243, 0.25);
+      background: rgba(5, 11, 20, 0.72);
+      backdrop-filter: blur(12px);
+      color: var(--soft-blue);
+      padding: 11px 17px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      transition: 0.3s ease;
+    }
+
+    .music-button:hover {
+      border-color: rgba(200, 226, 243, 0.65);
+      background: rgba(17, 36, 57, 0.85);
+      transform: translateY(-2px);
+    }
+
+    /* ---------- GENERAL ---------- */
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 90px 24px;
+      position: relative;
+    }
+
+    .container {
+      width: min(850px, 100%);
+      margin: auto;
+      text-align: center;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      font-size: 10px;
+      margin-bottom: 25px;
+      opacity: 0.8;
+    }
+
+    h1, h2, h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 400;
+    }
+
+    h1 {
+      font-size: clamp(52px, 12vw, 110px);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+
+    h2 {
+      font-size: clamp(42px, 7vw, 70px);
+      line-height: 1;
+      margin-bottom: 28px;
+    }
+
+    p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 2;
+      font-weight: 300;
+    }
+
+    .hero-sub {
+      margin: 30px auto 0;
+      max-width: 520px;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      animation: float 2.5s infinite ease-in-out;
+    }
+
+    .scroll-hint::after {
+      content: "↓";
+      display: block;
+      margin-top: 9px;
+      font-size: 16px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, 8px); }
+    }
+
+    /* ---------- JOURNEY LINE ---------- */
+
+    .journey {
+      position: relative;
+    }
+
+    .journey::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--line) 10%,
+        var(--line) 90%,
+        transparent
+      );
+    }
+
+    .milestone {
+      width: min(620px, 100%);
+      margin: 0 auto 150px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(45px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .milestone.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .milestone:last-child {
+      margin-bottom: 0;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      position: absolute;
+      left: 50%;
+      top: -34px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow:
+        0 0 0 7px rgba(159, 201, 232, 0.08),
+        0 0 25px rgba(159, 201, 232, 0.5);
+    }
+
+    .chapter {
+      color: var(--blue);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      margin-bottom: 15px;
+    }
+
+    .milestone h3 {
+      font-size: clamp(32px, 6vw, 48px);
+      margin-bottom: 18px;
+    }
+
+    .quote {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(23px, 4vw, 32px);
+      color: var(--soft-blue);
+      line-height: 1.35;
+      font-style: italic;
+      margin: 25px auto;
+    }
+
+    /* ---------- BIRTHDAY ---------- */
+
+    .birthday {
+      background:
+        radial-gradient(circle at 50% 50%, rgba(70, 130, 180, 0.12), transparent 45%);
+    }
+
+    .date {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(90px, 20vw, 190px);
+      line-height: 0.8;
+      color: rgba(200, 226, 243, 0.12);
+      position: absolute;
+      z-index: -1;
+      user-select: none;
+    }
+
+    .birthday-text {
+      max-width: 620px;
+      margin: auto;
+    }
+
+    .birthday-text strong {
+      color: var(--soft-blue);
+      font-weight: 400;
+    }
+
+    /* ---------- LETTER ---------- */
+
+    .letter-section {
+      min-height: 110vh;
+    }
+
+    .letter {
+      text-align: left;
+      width: min(650px, 100%);
+      padding: 45px;
+      border: 1px solid rgba(200, 226, 243, 0.12);
+      background: rgba(8, 18, 31, 0.55);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .letter::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: 35px;
+      right: 35px;
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(159, 201, 232, 0.45),
+        transparent
+      );
+    }
+
+    .letter p {
+      color: #bac8d5;
+      margin-bottom: 24px;
+    }
+
+    .letter .salutation {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 31px;
+      color: var(--soft-blue);
+      margin-bottom: 30px;
+    }
+
+    .signature {
+      font-family: "Cormorant Garamond", serif;
+      color: var(--soft-blue);
+      font-size: 29px;
+      margin-top: 35px;
+    }
+
+    /* ---------- END ---------- */
+
+    .ending {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at center, rgba(50, 100, 145, 0.12), transparent 50%);
+    }
+
+    .ending-message {
+      max-width: 680px;
+    }
+
+    .ending-message p {
+      font-size: 17px;
+      line-height: 2.1;
+    }
+
+    .final-name {
+      margin-top: 45px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 42px;
+      color: var(--soft-blue);
+    }
+
+    .tiny {
+      margin-top: 65px;
+      font-size: 9px;
+      color: rgba(145, 162, 181, 0.5);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* ---------- REVEAL ---------- */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: 1s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+
+    @media (max-width: 600px) {
+      section {
+        padding: 80px 20px;
+      }
+
+      .music-player {
+        top: 15px;
+        right: 15px;
+      }
+
+      .music-button {
+        padding: 9px 13px;
+        font-size: 10px;
+      }
+
+      .letter {
+        padding: 28px 24px;
+      }
+
+      .milestone {
+        margin-bottom: 120px;
+      }
+
+      .quote {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==========================================
+       MUSIC
+       Put your music file in the same folder
+       and name it: palayo-sa-mundo.mp3
+       ========================================== -->
+
+  <audio id="music" loop>
+    <source src="palayo-sa-mundo.mp3" type="audio/mpeg">
+    Your browser does not support audio.
+  </audio>
+
+  <div class="music-player">
+    <button class="music-button" id="musicButton">
+      ♪ PLAY THE SONG
+    </button>
+  </div>
+
+  <!-- BACKGROUND -->
+  <div id="stars"></div>
+  <div class="glow" id="glow"></div>
+
+  <!-- ==========================================
+       OPENING
+       ========================================== -->
+
+  <section class="hero">
+    <div class="container reveal">
+      <div class="eyebrow">September 9</div>
+
+      <h1>This isn't<br>really for me.</h1>
+
+      <p class="hero-sub">
+        Although today is supposed to be about a birthday,
+        somehow, I found myself thinking about you.
+      </p>
+    </div>
+
+    <div class="scroll-hint">
+      keep going
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       THE JOURNEY
+       ========================================== -->
+
+  <section class="journey">
+    <div class="container">
+
+      <!-- CHAPTER 01 -->
+      <div class="milestone">
+        <div class="dot"></div>
+
+        <div class="chapter">Chapter I</div>
+
+        <h3>It started rather unexpectedly.</h3>
+
+        <p>
+          Our very first conversation was born from a rather questionable
+          little mission — trying to find your social media profile.
+        </p>
+
+        <div class="quote">
+          “I found it… so I think I deserved talking to you.”
+        </div>
+
+        <p>
+          And somehow, that small attempt led me here —
+          remembering a person I never expected would become
+          such a meaningful part of my story.
+        </p>
+      </div>
+
+
+      <!-- CHAPTER 02 -->
+      <div class="milestone">
+        <div class="dot"></div>
+
+        <div class="chapter">Chapter II</div>
+
+        <h3>For a while, the road felt clear.</h3>
+
+        <p>
+          We were only talking at first.
+          But somewhere along the way, our conversations became
+          something more than casual words.
+        </p>
+
+        <p>
+          We talked about the future.
+          About possibilities.
+          About things that, at the time,
+          felt like they might actually happen.
+        </p>
+
+        <div class="quote">
+          Some conversations stay with you,
+          even after the conversation ends.
+        </div>
+      </div>
+
+
+      <!-- CHAPTER 03 -->
+      <div class="milestone">
+        <div class="dot"></div>
+
+        <div class="chapter">Chapter III</div>
+
+        <h3>Then the road changed.</h3>
+
+        <p>
+          Things didn't turn out the way I once imagined.
+          And I understand that.
+        </p>
+
+        <p>
+          You told me that you couldn't reciprocate my feelings,
+          and although that wasn't what I hoped to hear,
+          I respect you for being honest with me.
+        </p>
+
+        <p>
+          Some roads simply aren't meant to end
+          at the same destination.
+        </p>
+      </div>
+
+
+      <!-- CHAPTER 04 -->
+      <div class="milestone">
+        <div class="dot"></div>
+
+        <div class="chapter">Chapter IV</div>
+
+        <h3>But some things remain.</h3>
+
+        <p>
+          Your smile.
+        </p>
+
+        <p>
+          The way you can be so passionate about running —
+          always moving forward, one step after another.
+        </p>
+
+        <p>
+          And your love for books,
+          which somehow feels fitting,
+          because I think some people become chapters
+          you never really stop remembering.
+        </p>
+
+        <div class="quote">
+          You became a chapter I didn't know
+          I would carry with me.
+        </div>
+      </div>
+
+
+      <!-- CHAPTER 05 -->
+      <div class="milestone">
+        <div class="dot"></div>
+
+        <div class="chapter">Chapter V</div>
+
+        <h3>And then came September 9.</h3>
+
+        <p>
+          Today is my birthday.
+        </p>
+
+        <p>
+          Every birthday I've had was another opportunity
+          for me to give something to the people I care about.
+        </p>
+
+        <p>
+          So this year, instead of keeping the day entirely for myself,
+          I wanted to give a small part of it to you.
+        </p>
+
+        <div class="quote">
+          A small portion of the space
+          you still occupy inside my heart.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       BIRTHDAY REVEAL
+       ========================================== -->
+
+  <section class="birthday">
+    <div class="date">09·09</div>
+
+    <div class="container reveal birthday-text">
+
+      <div class="eyebrow">My birthday</div>
+
+      <h2>A strange birthday gift.</h2>
+
+      <p>
+        It's a little strange, isn't it?
+      </p>
+
+      <br>
+
+      <p>
+        Usually, on someone's birthday,
+        they're the one receiving something.
+      </p>
+
+      <br>
+
+      <p>
+        But this year, I wanted to leave something behind
+        for someone who once meant —
+        and, in some quiet way, still means —
+        something to me.
+      </p>
+
+      <br>
+
+      <p>
+        Not because I expect anything.
+        Not because I'm asking you to change how you feel.
+      </p>
+
+      <br>
+
+      <p>
+        Just because <strong>you mattered.</strong>
+      </p>
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       LETTER
+       ========================================== -->
+
+  <section class="letter-section">
+    <div class="letter reveal">
+
+      <div class="salutation">
+        Dear Aubrey,
+      </div>
+
+      <p>
+        Despite not turning out the way I once imagined,
+        you still are a lingering ghost inside my heart.
+      </p>
+
+      <p>
+        Not a ghost that haunts me,
+        but one that reminds me of a time
+        when something felt beautiful,
+        even if it wasn't meant to last.
+      </p>
+
+      <p>
+        I still remember how this all began —
+        with me trying to find your social media profile,
+        somehow convincing myself that finding it
+        meant I deserved a conversation with you.
+      </p>
+
+      <p>
+        I'm glad I did.
+      </p>
+
+      <p>
+        Because I got to know someone
+        with a beautiful smile,
+        someone passionate enough to chase miles,
+        and someone who could lose herself in the pages of a book.
+      </p>
+
+      <p>
+        And for a little while,
+        I got to imagine a future with you.
+      </p>
+
+      <p>
+        Maybe that future wasn't ours to have.
+        And that's okay.
+      </p>
+
+      <p>
+        I don't want this little website to be a weight
+        placed on your heart.
+        You don't owe me an answer,
+        a feeling,
+        or anything at all.
+      </p>
+
+      <p>
+        This is simply something I wanted to give.
+      </p>
+
+      <p>
+        Because every birthday I've had was an opportunity
+        for me to give something,
+        and this time,
+        I wanted to give you a small piece
+        of that space inside my heart.
+      </p>
+
+      <div class="signature">
+        — Berns
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       FINAL MESSAGE
+       ========================================== -->
+
+  <section class="ending">
+    <div class="container reveal ending-message">
+
+      <div class="eyebrow">The end of this little journey</div>
+
+      <h2>Happy birthday to me.</h2>
+
+      <p>
+        And somehow, this year,
+        I wanted to give something to you.
+      </p>
+
+      <br>
+
+      <p>
+        Thank you for being a beautiful part of my story,
+        Langga.
+      </p>
+
+      <br>
+
+      <p>
+        You don't have to give anything back.
+      </p>
+
+      <br>
+
+      <p>
+        I just wanted you to know.
+      </p>
+
+      <div class="final-name">
+        Berns
+      </div>
+
+      <div class="tiny">
+        September 9 · A chapter worth remembering
+      </div>
+
+    </div>
+  </section>
+
+
+  <script>
+    /* ==========================================
+       STAR FIELD
+       ========================================== */
+
+    const starContainer = document.getElementById("stars");
+
+    for (let i = 0; i < 110; i++) {
+      const star = document.createElement("div");
+
+      star.className = "star";
+
+      star.style.left = Math.random() * 100 + "vw";
+      star.style.top = Math.random() * 100 + "vh";
+
+      const size = Math.random() * 2.5 + 0.5;
+      star.style.width = size + "px";
+      star.style.height = size + "px";
+
+      star.style.animationDelay =
+        (Math.random() * 4) + "s";
+
+      star.style.animationDuration =
+        (Math.random() * 3 + 2) + "s";
+
+      starContainer.appendChild(star);
+    }
+
+
+    /* ==========================================
+       SCROLL REVEAL
+       ========================================== */
+
+    const revealElements =
+      document.querySelectorAll(".reveal, .milestone");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      {
+        threshold: 0.18
+      }
+    );
+
+    revealElements.forEach(element => {
+      observer.observe(element);
+    });
+
+
+    /* ==========================================
+       MUSIC PLAYER
+       ========================================== */
+
+    const music = document.getElementById("music");
+    const musicButton = document.getElementById("musicButton");
+
+    let playing = false;
+
+    musicButton.addEventListener("click", async () => {
+
+      if (!playing) {
+
+        try {
+          await music.play();
+
+          playing = true;
+
+          musicButton.innerHTML = "♫ MUSIC PLAYING";
+
+        } catch (error) {
+
+          musicButton.innerHTML =
+            "♪ ADD YOUR MUSIC FILE";
+
+          console.log(
+            "Make sure palayo-sa-mundo.mp3 is in the same folder as index.html."
+          );
+        }
+
+      } else {
+
+        music.pause();
+
+        playing = false;
+
+        musicButton.innerHTML = "♪ PLAY THE SONG";
+      }
+    });
+
+
+    /* ==========================================
+       SUBTLE MOUSE GLOW
+       ========================================== */
+
+    const glow = document.getElementById("glow");
+
+    document.addEventListener("mousemove", (event) => {
+
+      const x = event.clientX - 250;
+      const y = event.clientY - 250;
+
+      glow.style.transform =
+        `translate(${x}px, ${y}px)`;
+    });
+
+
+    /* ==========================================
+       MOBILE TOUCH GLOW
+       ========================================== */
+
+    document.addEventListener("touchmove", (event) => {
+
+      if (!event.touches.length) return;
+
+      const touch = event.touches[0];
+
+      const x = touch.clientX - 250;
+      const y = touch.clientY - 250;
+
+      glow.style.transform =
+        `translate(${x}px, ${y}px)`;
+    });
+  </script>
+
+</body>
+</html>
